@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.strongjoshua.console.GUIConsole;
+import org.pseudonymcode.naturalis.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class Game extends ApplicationAdapter {
     @Override
     public void create () {
         // Enter fullscreen mode immediately
-//        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 
         // Setup sprite batch renderer
         batch = new SpriteBatch();
@@ -65,7 +66,7 @@ public class Game extends ApplicationAdapter {
 
         // Create player object
         player = new Player();
-        player.getSprite().setPosition(0, 0);
+        player.getBodyHandler().getSprite().setPosition(0, 0);
 
         // Create 2D camera
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/Game.CAMERA_SCALE, Gdx.graphics.getHeight()/Game.CAMERA_SCALE);
@@ -85,8 +86,8 @@ public class Game extends ApplicationAdapter {
         player.update(dt);
 
         // Move the camera
-        camera.position.x = player.getSprite().getX();
-        camera.position.y = player.getSprite().getY();
+        camera.position.x = player.getBodyHandler().getSprite().getX();
+        camera.position.y = player.getBodyHandler().getSprite().getY();
         camera.update();
 
         // Begin drawing to the screen
@@ -103,7 +104,7 @@ public class Game extends ApplicationAdapter {
         }
 
         // Draw player
-        player.getSprite().draw(batch);
+        player.getBodyHandler().getSprite().draw(batch);
 
         // End drawing the game (so the UI can be drawn overtop)
         batch.end();

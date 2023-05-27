@@ -1,10 +1,7 @@
 package org.pseudonymcode.naturalis;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.strongjoshua.console.GUIConsole;
 
 public class InputHandler implements InputProcessor {
@@ -12,10 +9,7 @@ public class InputHandler implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.Q) {
-            Player p = Game.getPlayer();
-            if (p.getVelocity().x == 0 && p.getVelocity().y == 0) {
-                p.setMovementMode(p.getMovementMode() == Player.MovementMode.BOOSTERS ? Player.MovementMode.THRUSTERS : Player.MovementMode.BOOSTERS);
-            }
+            Game.getPlayer().getBodyHandler().toggleMovementMode();
             return true;
         }
         else if (keycode == Input.Keys.GRAVE) {

@@ -1,12 +1,13 @@
-package org.pseudonymcode.naturalis;
+package org.pseudonymcode.naturalis.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import org.pseudonymcode.naturalis.Game;
 
-public class Player {
+public class BodyHandler {
     public enum MovementMode {
         THRUSTERS, // WASD works like RPG movement
         BOOSTERS // WASD works like "Asteroids" game
@@ -19,27 +20,25 @@ public class Player {
     public static float BOOSTERS_TURN = 35;
 
     private Sprite sprite;
-
-    private Vector2 velocity;
-    private boolean focusOnGame = true;
     private MovementMode movementMode = MovementMode.THRUSTERS;
+    private Vector2 velocity;
 
-    public Player() {
+    public BodyHandler() {
         sprite = new Sprite(Game.getAssetHandler().getAssetManager().get("player/player.png", Texture.class));
         velocity = new Vector2(0, 0);
     }
 
-    public Sprite getSprite() {
-        return sprite;
-    }
-    public boolean isFocusOnGame() { return focusOnGame; }
+    public Sprite getSprite() { return sprite; }
     public MovementMode getMovementMode() { return movementMode; }
     public Vector2 getVelocity() { return velocity; }
 
-    public void setMovementMode(MovementMode mode) { movementMode = mode; }
+    public void toggleMovementMode() {
+        if (velocity.x == 0 && velocity.y == 0) {
+            movementMode = movementMode == MovementMode.BOOSTERS ? MovementMode.THRUSTERS : MovementMode.BOOSTERS;
+        }
+    }
 
-    public void update(float deltaTime) {
-        // Movement
+    public void stepPhysics(float deltaTime) {
         if (movementMode == MovementMode.THRUSTERS) {
             Vector2 vel = new Vector2(0, 0);
             if (Gdx.input.isKeyPressed(Input.Keys.W)) vel.y = 1;
@@ -51,17 +50,17 @@ public class Player {
             velocity.y += (vel.y - velocity.y * THRUSTERS_DECELERATION) * deltaTime;
             if (Math.abs(velocity.x) < 1) velocity.x = 0;
             if (Math.abs(velocity.y) < 1) velocity.y = 0;
-            this.sprite.setPosition(this.sprite.getX() + (velocity.x * deltaTime), this.sprite.getY() + (velocity.y * deltaTime));
+            sprite.setPosition(sprite.getX() + (velocity.x * deltaTime), sprite.getY() + (velocity.y * deltaTime));
         }
         else if (movementMode == MovementMode.BOOSTERS) {
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                this.sprite.rotate(BOOSTERS_TURN * deltaTime);
+            if (Gdx.input.isKeyPressed(Input.Keys.A) && velocity.isZero()) {
+                sprite.rotate(BOOSTERS_TURN * deltaTime);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                this.sprite.rotate(-BOOSTERS_TURN * deltaTime);
+            if (Gdx.input.isKeyPressed(Input.Keys.D) && velocity.isZero()) {
+                sprite.rotate(-BOOSTERS_TURN * deltaTime);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                Vector2 vel = new Vector2((float)Math.cos(Math.toRadians(this.sprite.getRotation())), (float)Math.sin(Math.toRadians((this.sprite.getRotation()))));
+                Vector2 vel = new Vector2((float)Math.cos(Math.toRadians(sprite.getRotation())), (float)Math.sin(Math.toRadians((sprite.getRotation()))));
                 velocity.x += vel.x * BOOSTERS_ACCELERATION * deltaTime;
                 velocity.y += vel.y * BOOSTERS_ACCELERATION * deltaTime;
             }
@@ -74,15 +73,7 @@ public class Player {
                     velocity.setZero();
                 }
             }
-            this.sprite.setPosition(this.sprite.getX() + (velocity.x * deltaTime), this.sprite.getY() + (velocity.y * deltaTime));
+            sprite.setPosition(sprite.getX() + (velocity.x * deltaTime), sprite.getY() + (velocity.y * deltaTime));
         }
-
-        // Check for collisions
-//        if (Game.getMap().checkCollision(this.sprite)) {
-//            // Undo move!
-//            position.x -= vel.x;
-//            position.y -= vel.y;
-//            sprite.setPosition(position.x, position.y);
-//        }
     }
 }
