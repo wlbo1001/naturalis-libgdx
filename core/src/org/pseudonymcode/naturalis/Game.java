@@ -24,6 +24,7 @@ public class Game extends ApplicationAdapter {
     public static OrthographicCamera camera;
     public static SpriteBatch batch;
     public static UIHandler uiHandler;
+    public static ItemHandler itemHandler;
     public static GUIConsole console;
     public static Player player;
     public static Texture background;
@@ -41,6 +42,9 @@ public class Game extends ApplicationAdapter {
         assetHandler = new AssetHandler();
         assetHandler.queueAssets();
         assetHandler.loadAllAssets();
+
+        // Load Items
+        itemHandler = new ItemHandler();
 
         // Create debug console
         console = new GUIConsole(false);

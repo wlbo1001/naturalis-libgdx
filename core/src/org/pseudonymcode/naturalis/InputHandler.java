@@ -1,5 +1,6 @@
 package org.pseudonymcode.naturalis;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.strongjoshua.console.GUIConsole;
@@ -22,6 +23,9 @@ public class InputHandler implements InputProcessor {
                 console.setVisible(true);
                 console.select();
             }
+        }
+        else if (keycode == Input.Keys.ESCAPE) {
+            Gdx.app.exit();
         }
 
         return false;

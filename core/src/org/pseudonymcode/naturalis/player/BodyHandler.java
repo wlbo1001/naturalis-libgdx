@@ -57,9 +57,12 @@ public class BodyHandler {
     }
 
     public void stepPhysics(float deltaTime, float fuel, float battery) {
+        // Run all tests to see if the player can move or not
+        boolean controlsEnabled = fuel != 0 && !(battery == 0 && velocity.isZero());
+
         if (movementMode == MovementMode.THRUSTERS) {
             Vector2 vel = new Vector2(0, 0);
-            if (fuel != 0 && !(battery == 0 && velocity.isZero())) {
+            if (controlsEnabled) {
                 if (Gdx.input.isKeyPressed(Input.Keys.W)) vel.y = 1;
                 if (Gdx.input.isKeyPressed(Input.Keys.S)) vel.y = -1;
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) vel.x = -1;
@@ -73,7 +76,7 @@ public class BodyHandler {
             setPosition(getPosition().x + (velocity.x * deltaTime), getPosition().y + (velocity.y * deltaTime));
         }
         else if (movementMode == MovementMode.BOOSTERS) {
-            if (fuel != 0 && !(battery == 0 && velocity.isZero())) {
+            if (controlsEnabled) {
                 if (Gdx.input.isKeyPressed(Input.Keys.A) && velocity.isZero()) {
                     sprite.rotate(BOOSTERS_TURN * deltaTime);
                 }

@@ -3,6 +3,7 @@ package org.pseudonymcode.naturalis;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -10,7 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.pseudonymcode.naturalis.player.BodyHandler;
+import org.pseudonymcode.naturalis.player.Inventory;
 import org.pseudonymcode.naturalis.player.Player;
+
+import java.util.List;
 
 public class UIHandler {
     private static final int DEBUG_TABLE_WIDTH = 50;
@@ -33,6 +37,8 @@ public class UIHandler {
     private Label health;
     private Label fuel;
     private Label battery;
+
+    private Inventory openInventory;
 
     public UIHandler() {
         int gameHeight = Gdx.graphics.getHeight();
@@ -104,4 +110,13 @@ public class UIHandler {
     }
 
     public Stage getStage() { return stage; }
+
+    public void setOpenInventory(Inventory inventory) {
+        stage.addActor(inventory.getTable());
+        openInventory = inventory;
+    }
+    public void closeOpenInventory() {
+        openInventory.getTable().remove();
+        openInventory = null;
+    }
 }
