@@ -1,12 +1,14 @@
 package org.pseudonymcode.naturalis.player;
 
-import org.pseudonymcode.naturalis.ItemHandler.ItemStack;
+import org.pseudonymcode.naturalis.items.ItemHandler;
+import org.pseudonymcode.naturalis.items.ItemStack;
 import org.pseudonymcode.naturalis.player.Inventory.SlotType;
+import org.pseudonymcode.naturalis.player.Inventory.InventoryOwner;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
+public class Player implements InventoryOwner {
     private static final int MAX_HEALTH = 100;
     private static final int MAX_FUEL = 100;
     private static final int MAX_BATTERY = 100;
@@ -18,9 +20,8 @@ public class Player {
 
 
     private BodyHandler bodyHandler;
-    private Inventory openInventory; // if this is not null, an inventory is open! (only one can be open at a time)
     private List<ItemStack> storage;
-    private Inventory storageInventory; // defines what the player sees when they open their inventory (could add functions to change this if player unlocks new things)
+    private boolean storageChanged; // set to true when any changes are made to storage
 
     // Player vitals
     private float health;
@@ -33,24 +34,78 @@ public class Player {
         fuel = MAX_FUEL;
         battery = MAX_BATTERY;
 
-        // Create the inventory that appears when the player accesses their storage
-        storageInventory = generateStorageInventory();
+        storage = new ArrayList<>();
+        for (int i = 0; i < MAX_STORAGE_STACKS; i++) storage.add(null); // make list MAX_STORAGE_STACKS in size but with no items yet
+        storageChanged = false;
     }
 
     public BodyHandler getBodyHandler() { return bodyHandler; }
-    public boolean isInventoryOpen() { return openInventory == null; }
 
     public float getHealth() { return health; }
     public float getFuel() { return fuel; }
     public float getBattery() { return battery; }
+    public List<ItemStack> getStorage() { return storage; }
 
     // Generate player's inventory (including any alterations, the below is just the default for now)
-    public Inventory generateStorageInventory() {
-        LinkedHashMap<SlotType, Object> slots = new LinkedHashMap<>();
+    public Inventory generateInventory() {
+        List<SlotType> slots = new ArrayList<>();
         for (int i = 0; i < MAX_STORAGE_STACKS; i++) {
-            slots.put(SlotType.PlayerStorage, null);
+            slots.add(SlotType.PlayerStorage);
         }
-        return new Inventory(slots, "playerInventoryDefault");
+        return new Inventory(slots, 5, 4, "playerInventoryDefault", this);
+    }
+
+    // The player's inventory is just the player's items (for now?)
+    public void updateInventory(Inventory inventory) {
+        inventory.setPlayerStorageSlots();
+    }
+
+    // returns whether the displayed inventory needs to be updated next frame (because the inventory has changed)
+    public boolean shouldCallInventoryUpdate() {
+        if (storageChanged) {
+            storageChanged = false;
+            return true;
+        }
+        else {
+            storageChanged = true;
+            return false;
+        }
+    }
+
+    public boolean onInventorySlotClick(SlotType slotType, int position) {
+        return true; // only normal behavior occurs, which is fine because all slots are PlayerStorage so normal ItemStack moving rules apply
+    }
+
+    public boolean insertIntoStorage(ItemStack itemStack) {
+        int firstEmptyPos = -1;
+        for (int i = 0; i < storage.size(); i++) {
+            ItemStack currStack = storage.get(i);
+            if (ItemHandler.areStacksCombinable(currStack, itemStack)) {
+                storage.set(i, ItemHandler.combineStacks(currStack, itemStack));
+                storageChanged = true;
+                return true;
+            }
+            if (storage.get(i) == null && firstEmptyPos == -1) firstEmptyPos = i;
+        }
+
+        // Add item if there is an open slot, else return false as there is no room
+        if (firstEmptyPos != -1) {
+            storage.set(firstEmptyPos, itemStack);
+            storageChanged = true;
+            return true;
+        }
+        return false;
+    }
+
+    // return true, as InventoryOwner states, means the ItemStack was successfully removed from this object's storage
+    public boolean outputFromStorage(ItemStack itemStack) {
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).item.name.equals(itemStack.item.name)) {
+                storage.set(i, null);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void update(float deltaTime) {

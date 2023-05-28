@@ -27,6 +27,7 @@ public class UIHandler {
 
     private Table debugTable;
     private Label debugLabel;
+    private Label fps;
     private Label positionX;
     private Label positionY;
     private Label velocityX;
@@ -55,12 +56,15 @@ public class UIHandler {
         debugTable.setPosition(0, gameHeight);
 
         debugLabel = new Label("[Debug]", skin);
+        fps = new Label("fps", skin);
         positionX = new Label("positionX", skin);
         positionY = new Label("positionY", skin);
         velocityX = new Label("velocityX", skin);
         velocityY = new Label("velocityY", skin);
 
         debugTable.add(debugLabel).left();
+        debugTable.row();
+        debugTable.add(fps).left();
         debugTable.row();
         debugTable.add(positionX).left();
         debugTable.row();
@@ -91,11 +95,13 @@ public class UIHandler {
 
         stage.addActor(debugTable);
         stage.addActor(vitalsTable);
+//        stage.setDebugAll(true);
     }
 
     public void draw(float deltaTime) {
         Player p = Game.getPlayer();
         BodyHandler bh = p.getBodyHandler();
+        fps.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
         positionX.setText("position.x: " + String.format("%.2f", bh.getPosition().x));
         positionY.setText("position.y: " + String.format("%.2f", bh.getPosition().y));
         velocityX.setText("velocity.x: " + String.format("%.2f", bh.getVelocity().x));
@@ -105,11 +111,16 @@ public class UIHandler {
         fuel.setText("Fuel: " + String.format("%.2f", p.getFuel()));
         battery.setText("Energy: " + String.format("%.2f", p.getBattery()));
 
+        // Update current inventory
+        if (openInventory != null) openInventory.update();
+
         stage.act(deltaTime);
         stage.draw();
     }
 
     public Stage getStage() { return stage; }
+    public boolean isInventoryOpen() { return openInventory != null; }
+    public Skin getSkin() { return skin; }
 
     public void setOpenInventory(Inventory inventory) {
         stage.addActor(inventory.getTable());
