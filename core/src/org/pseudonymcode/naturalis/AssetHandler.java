@@ -19,6 +19,7 @@ public class AssetHandler {
 
     // Queues all assets for the entire game for loading
     public void queueAssets() {
+        assetManager.load("player/default.png", Texture.class);
         assetManager.load("player/player.png", Texture.class);
         assetManager.load("backgrounds/default.jpg", Texture.class);
     }

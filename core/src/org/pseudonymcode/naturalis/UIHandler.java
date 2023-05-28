@@ -2,12 +2,14 @@ package org.pseudonymcode.naturalis;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import org.pseudonymcode.naturalis.player.BodyHandler;
 import org.pseudonymcode.naturalis.player.Player;
 
 public class UIHandler {
@@ -87,11 +89,11 @@ public class UIHandler {
 
     public void draw(float deltaTime) {
         Player p = Game.getPlayer();
-        Sprite s = p.getBodyHandler().getSprite();
-        positionX.setText("position.x: " + String.format("%.2f", s.getX()));
-        positionY.setText("position.y: " + String.format("%.2f", s.getY()));
-        velocityX.setText("velocity.x: " + String.format("%.2f", p.getBodyHandler().getVelocity().x));
-        velocityY.setText("velocity.y: " + String.format("%.2f", p.getBodyHandler().getVelocity().y));
+        BodyHandler bh = p.getBodyHandler();
+        positionX.setText("position.x: " + String.format("%.2f", bh.getPosition().x));
+        positionY.setText("position.y: " + String.format("%.2f", bh.getPosition().y));
+        velocityX.setText("velocity.x: " + String.format("%.2f", bh.getVelocity().x));
+        velocityY.setText("velocity.y: " + String.format("%.2f", bh.getVelocity().y));
 
         health.setText("Health: " + String.format("%.2f", p.getHealth()));
         fuel.setText("Fuel: " + String.format("%.2f", p.getFuel()));

@@ -66,7 +66,7 @@ public class Game extends ApplicationAdapter {
 
         // Create player object
         player = new Player();
-        player.getBodyHandler().getSprite().setPosition(0, 0);
+        player.getBodyHandler().setPosition(0, 0);
 
         // Create 2D camera
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/Game.CAMERA_SCALE, Gdx.graphics.getHeight()/Game.CAMERA_SCALE);
@@ -86,8 +86,8 @@ public class Game extends ApplicationAdapter {
         player.update(dt);
 
         // Move the camera
-        camera.position.x = player.getBodyHandler().getSprite().getX();
-        camera.position.y = player.getBodyHandler().getSprite().getY();
+        camera.position.x = player.getBodyHandler().getPosition().x;
+        camera.position.y = player.getBodyHandler().getPosition().y;
         camera.update();
 
         // Begin drawing to the screen
@@ -104,7 +104,7 @@ public class Game extends ApplicationAdapter {
         }
 
         // Draw player
-        player.getBodyHandler().getSprite().draw(batch);
+        player.getBodyHandler().draw(batch);
 
         // End drawing the game (so the UI can be drawn overtop)
         batch.end();
@@ -115,25 +115,14 @@ public class Game extends ApplicationAdapter {
         // Draw console
         console.draw();
     }
-//
-//	@Override
-//	public void resize(int width, int height) {
-//		camera.viewportWidth = width / Game.CAMERA_SCALE;
-//		camera.viewportHeight = height / Game.CAMERA_SCALE;
-//		//camera.position.set(width/2f, height/2f, 0);
-//	}
 
     @Override
     public void dispose () {
         batch.dispose();
     }
 
-    public static OrthographicCamera getCamera() {
-        return camera;
-    }
-    public static Player getPlayer() {
-        return player;
-    }
+    public static OrthographicCamera getCamera() { return camera; }
+    public static Player getPlayer() { return player; }
     public static GUIConsole getConsole() { return console; }
     public static AssetHandler getAssetHandler() { return assetHandler; }
 }

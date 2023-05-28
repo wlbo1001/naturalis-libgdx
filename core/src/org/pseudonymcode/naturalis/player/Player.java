@@ -1,6 +1,9 @@
 package org.pseudonymcode.naturalis.player;
 
 public class Player {
+    private static final int MAX_HEALTH = 100;
+    private static final int MAX_FUEL = 100;
+    private static final int MAX_BATTERY = 100;
     private static final int FUEL_BURN = 1;
     private static final int BATTERY_DRAIN = 1;
 
@@ -14,9 +17,9 @@ public class Player {
 
     public Player() {
         bodyHandler = new BodyHandler();
-        health = 100;
-        fuel = 100;
-        battery = 100;
+        health = MAX_HEALTH;
+        fuel = MAX_FUEL;
+        battery = MAX_BATTERY;
     }
 
     public BodyHandler getBodyHandler() { return bodyHandler; }
@@ -28,13 +31,15 @@ public class Player {
 
     public void update(float deltaTime) {
         // Movement
-        bodyHandler.stepPhysics(deltaTime);
+        bodyHandler.stepPhysics(deltaTime, fuel, battery);
 
         // Vitals
         if (!bodyHandler.getVelocity().isZero()) {
             fuel -= FUEL_BURN * deltaTime;
+            if (fuel < 0) fuel = 0;
         }
         battery -= BATTERY_DRAIN * deltaTime;
+        if (battery < 0) battery = 0;
 
         // Check for collisions
 //        if (Game.getMap().checkCollision(this.sprite)) {
