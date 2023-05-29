@@ -21,6 +21,7 @@ public class ItemHandler {
         // Should load these from a CSV/JSON file, but they're created right here in code for now!
         items.put("rocks", new Item("rocks", "Rocks\nThis item doesn't do anything right now!", 5, true, null, null));
         items.put("coal", new Item("coal", "Coal\nThis item is a test :)", 2, true, null, null));
+        items.put("cheese", new Item("cheese", "Cheese\nThis item will never do anything :D", 1, false, null, null));
     }
 
     public Item getItem(String name) {

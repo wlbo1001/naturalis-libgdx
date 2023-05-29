@@ -32,6 +32,7 @@ public class AssetHandler {
         // Item Assets
         assetManager.load("items/rocks.png", Texture.class);
         assetManager.load("items/coal.png", Texture.class);
+        assetManager.load("items/cheese.png", Texture.class);
     }
 
     // Loads assets asynchronously. Called over and over in the render function, game shouldn't try to load anything until this returns true.

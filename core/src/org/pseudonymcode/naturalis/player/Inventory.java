@@ -84,7 +84,7 @@ public class Inventory {
                     slots.add(new Slot(slotType, button));
                     break;
             }
-            table.add(button).left();
+            table.add(button).size(SLOT_SIZE, SLOT_SIZE).expandX().expandY();
             if (count == width-1) {
                 table.row();
                 count = 0;

@@ -40,7 +40,8 @@ public class InputHandler implements InputProcessor {
         }
         else if (keycode == Input.Keys.R) { // debug lol
             Game.getPlayer().insertIntoStorage(new ItemStack(Game.getItemHandler().getItem("rocks"), 1));
-//            Game.getPlayer().insertIntoStorage(new ItemStack(Game.getItemHandler().getItem("coal"), 202));
+            Game.getPlayer().insertIntoStorage(new ItemStack(Game.getItemHandler().getItem("coal"), 202));
+            Game.getPlayer().insertIntoStorage(new ItemStack(Game.getItemHandler().getItem("cheese"), 1));
         }
 
         return false;
