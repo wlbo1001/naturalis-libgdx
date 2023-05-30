@@ -162,10 +162,15 @@ public class Inventory {
 
     // Helper method to set a Slot at position in the slots list to show the given item
     public void setItem(ItemStack itemStack, int position) {
-        TextButton button = slots.get(position).button;
-        Image image = slots.get(position).image;
-        button.setText(Integer.toString(itemStack.count));
-        image.setDrawable(Game.assetHandler.getDrawableFromTexturePath("items/" + itemStack.item.name + ".png"));
+        Slot slot = slots.get(position);
+        if (itemStack == null) {
+            slot.button.setText("");
+            slot.image.setDrawable(NULL_ITEM_DRAWABLE);
+        }
+        else {
+            slot.button.setText(Integer.toString(itemStack.count));
+            slot.image.setDrawable(Game.assetHandler.getDrawableFromTexturePath("items/" + itemStack.item.name + ".png"));
+        }
     }
 
     // Helper method to load the player's storage into inventory slots of type PlayerStorage
@@ -175,7 +180,7 @@ public class Inventory {
         for (int i = 0; i < stacks.size(); i++) {
             Slot slot = slots.get(i);
             ItemStack itemStack = stacks.get(i);
-            if (slot.slotType == SlotType.PlayerStorage && itemStack != null) {
+            if (slot.slotType == SlotType.PlayerStorage) {
                 setItem(itemStack, i);
             }
         }

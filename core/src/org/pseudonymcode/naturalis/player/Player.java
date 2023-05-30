@@ -78,7 +78,6 @@ public class Player implements InventoryOwner {
         ItemStack stack = storage.get(position);
         storage.set(position, source.doDefaultSlotClick(stack, mouseButtonUsed));
         storageChanged = true;
-        source.update();
     }
 
     public boolean insertIntoStorage(ItemStack itemStack, int inputNumber) {
