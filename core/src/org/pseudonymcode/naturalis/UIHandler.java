@@ -1,25 +1,21 @@
 package org.pseudonymcode.naturalis;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.pseudonymcode.naturalis.player.BodyHandler;
-import org.pseudonymcode.naturalis.player.Inventory;
 import org.pseudonymcode.naturalis.player.Player;
-
-import java.util.List;
 
 public class UIHandler {
     private static final int DEBUG_TABLE_WIDTH = 50;
     private static final int VITALS_TABLE_WIDTH = 250;
     private static final int VITALS_TABLE_HEIGHT = 130;
+    private static final String UI_SKIN_PATH = "ui/tracer-ui.json";
 
 
     private Stage stage;
@@ -47,7 +43,7 @@ public class UIHandler {
 
         stage = new Stage(new ScreenViewport());
 
-        skin = new Skin(Gdx.files.internal("ui/vhs-ui.json"));
+        skin = new Skin(Gdx.files.internal(UI_SKIN_PATH));
 
         // DEBUG STATISTICS
         debugTable = new Table();
@@ -112,7 +108,9 @@ public class UIHandler {
         battery.setText("Energy: " + String.format("%.2f", p.getBattery()));
 
         // Update current inventory
-        if (openInventory != null) openInventory.update();
+        if (openInventory != null) {
+            openInventory.update();
+        }
 
         stage.act(deltaTime);
         stage.draw();
@@ -123,11 +121,13 @@ public class UIHandler {
     public Skin getSkin() { return skin; }
 
     public void setOpenInventory(Inventory inventory) {
-        stage.addActor(inventory.getTable());
+        stage.addActor(inventory.getImageTable());
+        stage.addActor(inventory.getButtonTable());
         openInventory = inventory;
     }
     public void closeOpenInventory() {
-        openInventory.getTable().remove();
+        openInventory.getButtonTable().remove();
+        openInventory.getImageTable().remove();
         openInventory = null;
     }
 }

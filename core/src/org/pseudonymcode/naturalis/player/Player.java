@@ -1,9 +1,11 @@
 package org.pseudonymcode.naturalis.player;
 
+import com.badlogic.gdx.Input;
+import org.pseudonymcode.naturalis.Inventory;
 import org.pseudonymcode.naturalis.items.ItemHandler;
 import org.pseudonymcode.naturalis.items.ItemStack;
-import org.pseudonymcode.naturalis.player.Inventory.SlotType;
-import org.pseudonymcode.naturalis.player.Inventory.InventoryOwner;
+import org.pseudonymcode.naturalis.Inventory.SlotType;
+import org.pseudonymcode.naturalis.Inventory.InventoryOwner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,25 +60,28 @@ public class Player implements InventoryOwner {
     // The player's inventory is just the player's items (for now?)
     public void updateInventory(Inventory inventory) {
         inventory.setPlayerStorageSlots();
+        storageChanged = false;
     }
 
     // returns whether the displayed inventory needs to be updated next frame (because the inventory has changed)
+    // sets itself to not return true next call unless something else sets this to true!
     public boolean shouldCallInventoryUpdate() {
         if (storageChanged) {
             storageChanged = false;
             return true;
         }
-        else {
-            storageChanged = true;
-            return false;
-        }
+        return false;
     }
 
-    public boolean onInventorySlotClick(SlotType slotType, int position) {
-        return true; // only normal behavior occurs, which is fine because all slots are PlayerStorage so normal ItemStack moving rules apply
+    // Implementation of what the player should do when the player clicks on a slot in its defined inventory
+    public void onInventorySlotClick(Inventory source, Inventory.Slot slot, int position, int mouseButtonUsed) {
+        ItemStack stack = storage.get(position);
+        storage.set(position, source.doDefaultSlotClick(stack, mouseButtonUsed));
+        storageChanged = true;
+        source.update();
     }
 
-    public boolean insertIntoStorage(ItemStack itemStack) {
+    public boolean insertIntoStorage(ItemStack itemStack, int inputNumber) {
         int firstEmptyPos = -1;
         for (int i = 0; i < storage.size(); i++) {
             ItemStack currStack = storage.get(i);
@@ -98,7 +103,7 @@ public class Player implements InventoryOwner {
     }
 
     // return true, as InventoryOwner states, means the ItemStack was successfully removed from this object's storage
-    public boolean outputFromStorage(ItemStack itemStack) {
+    public boolean outputFromStorage(ItemStack itemStack, int outputNumber) {
         for (int i = 0; i < storage.size(); i++) {
             if (storage.get(i).item.name.equals(itemStack.item.name)) {
                 storage.set(i, null);

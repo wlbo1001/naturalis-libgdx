@@ -5,6 +5,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class AssetHandler {
     private AssetManager assetManager;
@@ -30,6 +32,7 @@ public class AssetHandler {
         assetManager.load("ui/backgrounds/playerInventoryDefault.png", Texture.class);
 
         // Item Assets
+        assetManager.load("items/null.png", Texture.class);
         assetManager.load("items/rocks.png", Texture.class);
         assetManager.load("items/coal.png", Texture.class);
         assetManager.load("items/cheese.png", Texture.class);
@@ -45,6 +48,10 @@ public class AssetHandler {
     // Loads all assets *synchronously*
     public void loadAllAssets() {
         assetManager.finishLoading();
+    }
+
+    public Drawable getDrawableFromTexturePath(String path) {
+        return new TextureRegionDrawable(assetManager.get(path, Texture.class));
     }
 
     public AssetManager getAssetManager() { return assetManager; }
