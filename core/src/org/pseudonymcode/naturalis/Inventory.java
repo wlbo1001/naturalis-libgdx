@@ -68,7 +68,7 @@ public class Inventory {
         Slot slot = slots.get(slotPos);
         source.onInventorySlotClick(this, slot, slotPos, buttonUsed);
         if (hoverItemStack != null) Game.getUiHandler().setItemHover(Game.getAssetHandler().getDrawableFromTexturePath("items/" + hoverItemStack.item.name + ".png"), hoverItemStack.count);
-        else Game.getUiHandler().removeItemHover();
+        else Game.getUiHandler().setItemHoverEmpty();
     }
 
     // Can be called by an InventoryOwner from their onInventorySlotClick() function to have normal left and right click behavior on the clicked on Slot

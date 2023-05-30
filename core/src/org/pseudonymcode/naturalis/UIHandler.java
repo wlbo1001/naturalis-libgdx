@@ -136,26 +136,39 @@ public class UIHandler {
     public void closeOpenInventory() {
         openInventory.getButtonTable().remove();
         openInventory.getImageTable().remove();
-        itemHoverImage.remove();
-        itemHoverCount.remove();
-        itemHoverImage = null;
-        itemHoverCount = null;
+        if (itemHoverImage != null && itemHoverCount != null) {
+            itemHoverImage.remove();
+            itemHoverCount.remove();
+            itemHoverImage = null;
+            itemHoverCount = null;
+        }
         openInventory = null;
     }
 
     // Sets an image (intended to be of an Item) to hover near the cursor, used when the player has "picked up" an item from their inventory but hasn't placed it down yet
     public void setItemHover(Drawable image, int count) {
-        itemHoverImage = new Image(image);itemHoverImage.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
-        itemHoverCount = new TextArea(Integer.toString(count), skin);
-        itemHoverCount.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
-        stage.addActor(itemHoverImage);
-        stage.addActor(itemHoverCount);
+        if (itemHoverImage == null && itemHoverCount == null) {
+            itemHoverImage = new Image(image);itemHoverImage.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
+            itemHoverCount = new TextArea(Integer.toString(count), skin);
+            itemHoverCount.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
+            stage.addActor(itemHoverImage);
+            stage.addActor(itemHoverCount);
+        }
+        else if (itemHoverImage != null && itemHoverCount != null) { // exists already, just update its image
+            itemHoverImage.setDrawable(image);
+            itemHoverCount.setText(Integer.toString(count));
+        }
+        else {
+            throw new RuntimeException("The item hover image+count UI element combo has been broken somehow!");
+        }
     }
-    public void removeItemHover() {
-        itemHoverImage.remove();
-        itemHoverCount.remove();
-        itemHoverImage = null;
-        itemHoverCount = null;
+    public void setItemHoverEmpty() {
+        if (itemHoverImage != null && itemHoverCount != null) {
+            itemHoverImage.remove();
+            itemHoverCount.remove();
+            itemHoverImage = null;
+            itemHoverCount = null;
+        }
     }
 
 
