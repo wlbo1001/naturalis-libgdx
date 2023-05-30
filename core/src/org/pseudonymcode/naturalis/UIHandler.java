@@ -2,10 +2,8 @@ package org.pseudonymcode.naturalis;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.pseudonymcode.naturalis.player.BodyHandler;
@@ -15,7 +13,7 @@ public class UIHandler {
     private static final int DEBUG_TABLE_WIDTH = 50;
     private static final int VITALS_TABLE_WIDTH = 250;
     private static final int VITALS_TABLE_HEIGHT = 130;
-    private static final String UI_SKIN_PATH = "ui/tracer-ui.json";
+    private static final String UI_SKIN_PATH = "ui/uiskin.json";
 
 
     private Stage stage;
@@ -36,6 +34,8 @@ public class UIHandler {
     private Label battery;
 
     private Inventory openInventory;
+    private Image itemHoverImage;
+    private TextArea itemHoverCount;
 
     public UIHandler() {
         int gameHeight = Gdx.graphics.getHeight();
@@ -91,7 +91,7 @@ public class UIHandler {
 
         stage.addActor(debugTable);
         stage.addActor(vitalsTable);
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
     }
 
     public void draw(float deltaTime) {
@@ -107,9 +107,15 @@ public class UIHandler {
         fuel.setText("Fuel: " + String.format("%.2f", p.getFuel()));
         battery.setText("Energy: " + String.format("%.2f", p.getBattery()));
 
-        // Update current inventory
-        if (openInventory != null) {
-            openInventory.update();
+        // Update the inventory (draws results)
+        if (openInventory != null) openInventory.update();
+
+        // Update hover item elements if they exist
+        if (itemHoverImage != null && itemHoverCount != null) {
+            float x = Gdx.input.getX()+5;
+            float y  = Gdx.graphics.getHeight() - Gdx.input.getY()+5;
+            itemHoverImage.setPosition(x, y);
+            itemHoverCount.setPosition(x, y);
         }
 
         stage.act(deltaTime);
@@ -121,20 +127,37 @@ public class UIHandler {
     public Skin getSkin() { return skin; }
 
     public void setOpenInventory(Inventory inventory) {
+        // Inventory UI elements
         stage.addActor(inventory.getImageTable());
         stage.addActor(inventory.getButtonTable());
+
         openInventory = inventory;
     }
     public void closeOpenInventory() {
         openInventory.getButtonTable().remove();
         openInventory.getImageTable().remove();
+        itemHoverImage.remove();
+        itemHoverCount.remove();
+        itemHoverImage = null;
+        itemHoverCount = null;
         openInventory = null;
     }
 
     // Sets an image (intended to be of an Item) to hover near the cursor, used when the player has "picked up" an item from their inventory but hasn't placed it down yet
-    public void setItemHover() {
-
+    public void setItemHover(Drawable image, int count) {
+        itemHoverImage = new Image(image);itemHoverImage.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
+        itemHoverCount = new TextArea(Integer.toString(count), skin);
+        itemHoverCount.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
+        stage.addActor(itemHoverImage);
+        stage.addActor(itemHoverCount);
     }
+    public void removeItemHover() {
+        itemHoverImage.remove();
+        itemHoverCount.remove();
+        itemHoverImage = null;
+        itemHoverCount = null;
+    }
+
 
     // Sets a text box to hover underneath a mouse (intended to be a tooltip)
     public void setTooltipHover() {

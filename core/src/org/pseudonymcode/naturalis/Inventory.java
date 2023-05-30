@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import org.pseudonymcode.naturalis.items.ItemHandler;
 import org.pseudonymcode.naturalis.items.ItemStack;
 
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class Inventory {
         // Functions for maintaining & creating the inventory's UI objects
         public Inventory generateInventory();
         public void updateInventory(Inventory inventory); // update the currently open inventory (probably to show any changes made to your internals)
-        public boolean shouldCallInventoryUpdate(); // if this returns true, your updateInventory() function will be called next frame (this function should probably ONLY return true if an inventory has been changed!)
         public void onInventorySlotClick(Inventory source, Slot slot, int number, int mouseButtonUsed); // when a button is clicked, this is called before doing the normal behavior of moving and placing ItemStacks (should call the Inventory function doDefaultSlotClick() for default behavior)
 
         // Functions for interfacing with the storage (ItemStacks in an inventory) (also may be more than one storage list internally, so these should handle that)
@@ -57,7 +55,7 @@ public class Inventory {
     }
 
     public static final int SLOT_SIZE = 75;
-    private static final Drawable NULL_ITEM_DRAWABLE = Game.getAssetHandler().getDrawableFromTexturePath("items/null.png");
+    public static final Drawable NULL_ITEM_DRAWABLE = Game.getAssetHandler().getDrawableFromTexturePath("items/null.png");
 
     private Table buttonTable;
     private Table imageTable;
@@ -69,24 +67,30 @@ public class Inventory {
     private void onPlayerSlotInteraction(int slotPos, int buttonUsed) {
         Slot slot = slots.get(slotPos);
         source.onInventorySlotClick(this, slot, slotPos, buttonUsed);
+        if (hoverItemStack != null) Game.getUiHandler().setItemHover(Game.getAssetHandler().getDrawableFromTexturePath("items/" + hoverItemStack.item.name + ".png"), hoverItemStack.count);
+        else Game.getUiHandler().removeItemHover();
     }
 
     // Can be called by an InventoryOwner from their onInventorySlotClick() function to have normal left and right click behavior on the clicked on Slot
+    // Caller should set the clicked on stack in their storage to the return ItemStack of this function (it handles the hover stack)
     public ItemStack doDefaultSlotClick(ItemStack stack, int mouseButtonUsed) {
         if (mouseButtonUsed == Input.Buttons.LEFT) { // left click
+            System.out.println("Left clicked a slot!");
             if (stack != null) {
                 if (hoverItemStack == null) {
                     hoverItemStack = stack;
                     return null; // caller should set their inventory slot to null, the item has been moved
                 }
                 else {
-                    if (ItemHandler.areStacksCombinable(stack, hoverItemStack)) {
-                        ItemStack newItemStack = ItemHandler.combineStacks(stack, hoverItemStack);
+                    if (ItemStack.areStacksCombinable(stack, hoverItemStack)) { // combine stacks, removing the hover stack
+                        ItemStack newItemStack = ItemStack.combineStacks(stack, hoverItemStack);
                         hoverItemStack = null;
                         return newItemStack;
                     }
-                    else {
-                        return stack;
+                    else { // switch hover stack with clicked on stack
+                        ItemStack tempStack = hoverItemStack;
+                        hoverItemStack = stack;
+                        return tempStack;
                     }
                 }
             }
@@ -97,9 +101,21 @@ public class Inventory {
             }
         }
         else if (mouseButtonUsed == Input.Buttons.RIGHT) { // right click
-            System.out.println("Oops no right click yet ;)");
+            System.out.println("Right clicked a slot!");
+            if (hoverItemStack != null) {
+                if (ItemStack.areStacksCombinable(stack, hoverItemStack) || stack == null) { // transfer one item from hover stack into stack
+                    ItemStack tempHover = ItemStack.createItemStack(hoverItemStack.item, hoverItemStack.count);
+                    assert tempHover != null; // don't know why this is wanted, but it's here so there you go
+                    hoverItemStack = ItemStack.createItemStack(tempHover.item, tempHover.count - 1);
+                    return ItemStack.createItemStack(tempHover.item, stack == null ? 1 : stack.count+1);
+                }
+            }
+            else if (stack != null) {
+                hoverItemStack = ItemStack.createItemStack(stack.item, (int)Math.ceil((double)stack.count/2.0));
+                return ItemStack.createItemStack(stack.item, (int)Math.floor((double)stack.count/2.0));
+            }
         }
-        return null;
+        return stack; // caller does nothing on this return
     }
 
     // Functions to generate an inventory
@@ -107,7 +123,7 @@ public class Inventory {
         TextButton button = new TextButton("", Game.getUiHandler().getSkin());
         button.setSize(SLOT_SIZE, SLOT_SIZE);
         // event handler for when the button is clicked
-        button.addListener(new ClickListener() {
+        button.addListener(new ClickListener(-1) { // listens on every button with -1
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 onPlayerSlotInteraction(slotNum, event.getButton());
@@ -160,7 +176,6 @@ public class Inventory {
     public void update() {
         // Do any updates mandated by the SlotTypes
 
-//        if (source.shouldCallInventoryUpdate()) source.updateInventory(this);
         source.updateInventory(this);
     }
 

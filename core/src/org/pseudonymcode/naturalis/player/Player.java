@@ -1,8 +1,6 @@
 package org.pseudonymcode.naturalis.player;
 
-import com.badlogic.gdx.Input;
 import org.pseudonymcode.naturalis.Inventory;
-import org.pseudonymcode.naturalis.items.ItemHandler;
 import org.pseudonymcode.naturalis.items.ItemStack;
 import org.pseudonymcode.naturalis.Inventory.SlotType;
 import org.pseudonymcode.naturalis.Inventory.InventoryOwner;
@@ -62,16 +60,6 @@ public class Player implements InventoryOwner {
         inventory.setPlayerStorageSlots();
     }
 
-    // returns whether the displayed inventory needs to be updated next frame (because the inventory has changed)
-    // sets itself to not return true next call unless something else sets this to true!
-    public boolean shouldCallInventoryUpdate() {
-        if (storageChanged) {
-            storageChanged = false;
-            return true;
-        }
-        return false;
-    }
-
     // Implementation of what the player should do when the player clicks on a slot in its defined inventory
     public void onInventorySlotClick(Inventory source, Inventory.Slot slot, int position, int mouseButtonUsed) {
         ItemStack stack = storage.get(position);
@@ -83,8 +71,8 @@ public class Player implements InventoryOwner {
         int firstEmptyPos = -1;
         for (int i = 0; i < storage.size(); i++) {
             ItemStack currStack = storage.get(i);
-            if (ItemHandler.areStacksCombinable(currStack, itemStack)) {
-                storage.set(i, ItemHandler.combineStacks(currStack, itemStack));
+            if (ItemStack.areStacksCombinable(currStack, itemStack)) {
+                storage.set(i, ItemStack.combineStacks(currStack, itemStack));
                 storageChanged = true;
                 return true;
             }

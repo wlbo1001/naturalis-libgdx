@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.strongjoshua.console.GUIConsole;
-import org.pseudonymcode.naturalis.items.ItemHandler;
+import org.pseudonymcode.naturalis.items.Item;
 import org.pseudonymcode.naturalis.player.Player;
 
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ public class Game extends ApplicationAdapter {
     private static OrthographicCamera camera;
     private static SpriteBatch batch;
     private static UIHandler uiHandler;
-    private static ItemHandler itemHandler;
     private static GUIConsole console;
     private static Player player;
     private static Texture background;
@@ -45,7 +44,7 @@ public class Game extends ApplicationAdapter {
         assetHandler.loadAllAssets();
 
         // Load Items
-        itemHandler = new ItemHandler();
+        Item.loadItems();
 
         // Create debug console
         console = new GUIConsole(false);
@@ -131,5 +130,4 @@ public class Game extends ApplicationAdapter {
     public static GUIConsole getConsole() { return console; }
     public static AssetHandler getAssetHandler() { return assetHandler; }
     public static UIHandler getUiHandler() { return uiHandler; }
-    public static ItemHandler getItemHandler() { return itemHandler; }
 }
