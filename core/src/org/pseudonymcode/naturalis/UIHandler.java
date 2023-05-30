@@ -130,4 +130,14 @@ public class UIHandler {
         openInventory.getImageTable().remove();
         openInventory = null;
     }
+
+    // Sets an image (intended to be of an Item) to hover near the cursor, used when the player has "picked up" an item from their inventory but hasn't placed it down yet
+    public void setItemHover() {
+
+    }
+
+    // Sets a text box to hover underneath a mouse (intended to be a tooltip)
+    public void setTooltipHover() {
+
+    }
 }

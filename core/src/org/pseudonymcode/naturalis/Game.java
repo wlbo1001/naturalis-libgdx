@@ -64,8 +64,8 @@ public class Game extends ApplicationAdapter {
 
         // Test Objects
         for (int i = 0; i < 1000; i++) {
-            Sprite sprite = new Sprite(assetHandler.getAssetManager().get("player/player.png", Texture.class));
-            sprite.setPosition((float)Math.random()*1000, (float)Math.random()*1000);
+            Sprite sprite = new Sprite(assetHandler.getAssetManager().get("entities/asteroids/circle1.png", Texture.class));
+            sprite.setPosition((float)Math.random()*3000, (float)Math.random()*3000);
             objs.add(sprite);
         }
 

@@ -23,7 +23,6 @@ public class AssetHandler {
     public void queueAssets() {
         // Player assets
         assetManager.load("player/default.png", Texture.class);
-        assetManager.load("player/player.png", Texture.class);
 
         // Background Assets
         assetManager.load("backgrounds/default.jpg", Texture.class);
@@ -36,6 +35,9 @@ public class AssetHandler {
         assetManager.load("items/rocks.png", Texture.class);
         assetManager.load("items/coal.png", Texture.class);
         assetManager.load("items/cheese.png", Texture.class);
+
+        // Entity Assets
+        assetManager.load("entities/asteroids/circle1.png", Texture.class);
     }
 
     // Loads assets asynchronously. Called over and over in the render function, game shouldn't try to load anything until this returns true.

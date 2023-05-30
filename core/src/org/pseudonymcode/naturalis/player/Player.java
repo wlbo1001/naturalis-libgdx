@@ -60,7 +60,6 @@ public class Player implements InventoryOwner {
     // The player's inventory is just the player's items (for now?)
     public void updateInventory(Inventory inventory) {
         inventory.setPlayerStorageSlots();
-        storageChanged = false;
     }
 
     // returns whether the displayed inventory needs to be updated next frame (because the inventory has changed)

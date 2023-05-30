@@ -85,6 +85,9 @@ public class Inventory {
                         hoverItemStack = null;
                         return newItemStack;
                     }
+                    else {
+                        return stack;
+                    }
                 }
             }
             else if (hoverItemStack != null) { // clicked on stack is null, so see if hover item exists
@@ -157,7 +160,8 @@ public class Inventory {
     public void update() {
         // Do any updates mandated by the SlotTypes
 
-        if (source.shouldCallInventoryUpdate()) source.updateInventory(this);
+//        if (source.shouldCallInventoryUpdate()) source.updateInventory(this);
+        source.updateInventory(this);
     }
 
     // Helper method to set a Slot at position in the slots list to show the given item
@@ -175,7 +179,6 @@ public class Inventory {
 
     // Helper method to load the player's storage into inventory slots of type PlayerStorage
     public void setPlayerStorageSlots() {
-        System.out.println("Player inventory *should* update now xd");
         List<ItemStack> stacks = Game.getPlayer().getStorage();
         for (int i = 0; i < stacks.size(); i++) {
             Slot slot = slots.get(i);
