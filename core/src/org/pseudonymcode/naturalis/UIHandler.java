@@ -1,6 +1,7 @@
 package org.pseudonymcode.naturalis;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -13,7 +14,7 @@ public class UIHandler {
     private static final int DEBUG_TABLE_WIDTH = 50;
     private static final int VITALS_TABLE_WIDTH = 250;
     private static final int VITALS_TABLE_HEIGHT = 130;
-    private static final String UI_SKIN_PATH = "ui/uiskin.json";
+    private static final String UI_SKIN_PATH = "ui/default.json";
 
 
     private Stage stage;
@@ -112,7 +113,7 @@ public class UIHandler {
 
         // Update hover item elements if they exist
         if (itemHoverImage != null && itemHoverCount != null) {
-            float x = Gdx.input.getX()+5;
+            float x = Gdx.input.getX()-Inventory.SLOT_SIZE-5;
             float y  = Gdx.graphics.getHeight() - Gdx.input.getY()+5;
             itemHoverImage.setPosition(x, y);
             itemHoverCount.setPosition(x, y);
@@ -120,6 +121,7 @@ public class UIHandler {
 
         stage.act(deltaTime);
         stage.draw();
+
     }
 
     public Stage getStage() { return stage; }
@@ -150,7 +152,7 @@ public class UIHandler {
         if (itemHoverImage == null && itemHoverCount == null) {
             itemHoverImage = new Image(image);itemHoverImage.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
             itemHoverCount = new TextArea(Integer.toString(count), skin);
-            itemHoverCount.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
+            itemHoverCount.setSize(Inventory.SLOT_SIZE, Inventory.SLOT_SIZE/2f);
             stage.addActor(itemHoverImage);
             stage.addActor(itemHoverCount);
         }

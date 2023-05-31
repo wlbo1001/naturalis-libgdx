@@ -29,6 +29,7 @@ allprojects {
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
+        visuiVersion = '1.5.1'
     }
 
     repositories {
@@ -92,5 +93,6 @@ project(":core") {
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "com.strongjoshua:libgdx-inGameConsole:1.0.0"
+        api "com.kotcrab.vis:vis-ui:$visuiVersion"
     }
 }
