@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.strongjoshua.console.GUIConsole;
+import org.pseudonymcode.naturalis.items.Item;
 import org.pseudonymcode.naturalis.player.Player;
 
 import java.util.ArrayList;
@@ -21,13 +22,13 @@ public class Game extends ApplicationAdapter {
 
     public static AssetHandler assetHandler;
 
-    public static OrthographicCamera camera;
-    public static SpriteBatch batch;
-    public static UIHandler uiHandler;
-    public static GUIConsole console;
-    public static Player player;
-    public static Texture background;
-    public static List<Sprite> objs = new ArrayList<>();
+    private static OrthographicCamera camera;
+    private static SpriteBatch batch;
+    private static UIHandler uiHandler;
+    private static GUIConsole console;
+    private static Player player;
+    private static Texture background;
+    private static List<Sprite> objs = new ArrayList<>();
 
     @Override
     public void create () {
@@ -41,6 +42,9 @@ public class Game extends ApplicationAdapter {
         assetHandler = new AssetHandler();
         assetHandler.queueAssets();
         assetHandler.loadAllAssets();
+
+        // Load Items
+        Item.loadItems();
 
         // Create debug console
         console = new GUIConsole(false);
@@ -59,8 +63,8 @@ public class Game extends ApplicationAdapter {
 
         // Test Objects
         for (int i = 0; i < 1000; i++) {
-            Sprite sprite = new Sprite(assetHandler.getAssetManager().get("player/player.png", Texture.class));
-            sprite.setPosition((float)Math.random()*1000, (float)Math.random()*1000);
+            Sprite sprite = new Sprite(assetHandler.getAssetManager().get("entities/asteroids/circle1.png", Texture.class));
+            sprite.setPosition((float)Math.random()*3000, (float)Math.random()*3000);
             objs.add(sprite);
         }
 
@@ -125,4 +129,5 @@ public class Game extends ApplicationAdapter {
     public static Player getPlayer() { return player; }
     public static GUIConsole getConsole() { return console; }
     public static AssetHandler getAssetHandler() { return assetHandler; }
+    public static UIHandler getUiHandler() { return uiHandler; }
 }

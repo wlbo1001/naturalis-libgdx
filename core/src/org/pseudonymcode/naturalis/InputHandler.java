@@ -1,8 +1,11 @@
 package org.pseudonymcode.naturalis;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.strongjoshua.console.GUIConsole;
+import org.pseudonymcode.naturalis.items.Item;
+import org.pseudonymcode.naturalis.items.ItemStack;
 
 public class InputHandler implements InputProcessor {
 
@@ -22,6 +25,23 @@ public class InputHandler implements InputProcessor {
                 console.setVisible(true);
                 console.select();
             }
+        }
+        else if (keycode == Input.Keys.ESCAPE) {
+            Gdx.app.exit();
+        }
+        else if (keycode == Input.Keys.E) {
+            UIHandler uiHandler = Game.getUiHandler();
+            if (uiHandler.isInventoryOpen()) {
+                uiHandler.closeOpenInventory();
+            }
+            else {
+                uiHandler.setOpenInventory(Game.getPlayer().generateInventory());
+            }
+        }
+        else if (keycode == Input.Keys.R) { // debug lol
+            Game.getPlayer().insertIntoStorage(new ItemStack(Item.getItem("rocks"), 1), 0);
+            Game.getPlayer().insertIntoStorage(new ItemStack(Item.getItem("coal"), 202), 0);
+            Game.getPlayer().insertIntoStorage(new ItemStack(Item.getItem("cheese"), 1), 0);
         }
 
         return false;
