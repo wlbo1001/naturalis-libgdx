@@ -36,7 +36,7 @@ public class UIHandler {
 
     private Inventory openInventory;
     private Image itemHoverImage;
-    private TextArea itemHoverCount;
+    private Label itemHoverCount;
 
     public UIHandler() {
         int gameHeight = Gdx.graphics.getHeight();
@@ -92,7 +92,7 @@ public class UIHandler {
 
         stage.addActor(debugTable);
         stage.addActor(vitalsTable);
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
     }
 
     public void draw(float deltaTime) {
@@ -113,10 +113,11 @@ public class UIHandler {
 
         // Update hover item elements if they exist
         if (itemHoverImage != null && itemHoverCount != null) {
-            float x = Gdx.input.getX()-Inventory.SLOT_SIZE-5;
-            float y  = Gdx.graphics.getHeight() - Gdx.input.getY()+5;
-            itemHoverImage.setPosition(x, y);
-            itemHoverCount.setPosition(x, y);
+            float x = Gdx.input.getX();
+            float y = Gdx.graphics.getHeight() - Gdx.input.getY();
+            float offset = Inventory.SLOT_SIZE/8f;
+            itemHoverImage.setPosition(x-4*offset, y+offset);
+            itemHoverCount.setPosition(x-4*offset, y+offset);
         }
 
         stage.act(deltaTime);
@@ -151,8 +152,9 @@ public class UIHandler {
     public void setItemHover(Drawable image, int count) {
         if (itemHoverImage == null && itemHoverCount == null) {
             itemHoverImage = new Image(image);itemHoverImage.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
-            itemHoverCount = new TextArea(Integer.toString(count), skin);
-            itemHoverCount.setSize(Inventory.SLOT_SIZE, Inventory.SLOT_SIZE/2f);
+            itemHoverCount = new Label(Integer.toString(count), skin);
+            itemHoverCount.setSize(Inventory.SLOT_SIZE/2f, Inventory.SLOT_SIZE/2f);
+            itemHoverCount.setAlignment(Align.bottom);
             stage.addActor(itemHoverImage);
             stage.addActor(itemHoverCount);
         }

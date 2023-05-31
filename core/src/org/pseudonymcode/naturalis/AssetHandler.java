@@ -32,9 +32,9 @@ public class AssetHandler {
 
         // Item Assets
         assetManager.load("items/null.png", Texture.class);
-        assetManager.load("items/rocks.png", Texture.class);
-        assetManager.load("items/coal.png", Texture.class);
-        assetManager.load("items/cheese.png", Texture.class);
+        assetManager.load("items/debugItem1.png", Texture.class);
+        assetManager.load("items/debugItem2.png", Texture.class);
+        assetManager.load("items/debugItem3.png", Texture.class);
 
         // Entity Assets
         assetManager.load("entities/asteroids/circle1.png", Texture.class);

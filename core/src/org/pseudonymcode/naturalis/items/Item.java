@@ -19,9 +19,9 @@ public class Item {
         items = new HashMap<>();
 
         // Should load these from a CSV/JSON file, but they're created right here in code for now!
-        items.put("rocks", new Item("rocks", "Rocks\nThis item doesn't do anything right now!", 5, true, null, null));
-        items.put("coal", new Item("coal", "Coal\nThis item is a test :)", 2, true, null, null));
-        items.put("cheese", new Item("cheese", "Cheese\nThis item will never do anything :D", 1, false, null, null));
+        items.put("debugItem1", new Item("debugItem1", "Debug Item 1\nThis item doesn't do anything right now!", 5, true, null, null));
+        items.put("debugItem2", new Item("debugItem2", "Debug Item 2\nThis item is a test :)", 2, true, null, null));
+        items.put("debugItem3", new Item("debugItem3", "Debug Item 3\nThis item will never do anything :D", 1, false, null, null));
     }
 
     public static Item getItem(String name) {

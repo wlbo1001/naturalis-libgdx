@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import org.pseudonymcode.naturalis.items.ItemStack;
 
 import java.util.ArrayList;
@@ -75,7 +76,6 @@ public class Inventory {
     // Caller should set the clicked on stack in their storage to the return ItemStack of this function (it handles the hover stack)
     public ItemStack doDefaultSlotClick(ItemStack stack, int mouseButtonUsed) {
         if (mouseButtonUsed == Input.Buttons.LEFT) { // left click
-            System.out.println("Left clicked a slot!");
             if (stack != null) {
                 if (hoverItemStack == null) {
                     hoverItemStack = stack;
@@ -101,7 +101,6 @@ public class Inventory {
             }
         }
         else if (mouseButtonUsed == Input.Buttons.RIGHT) { // right click
-            System.out.println("Right clicked a slot!");
             if (hoverItemStack != null) {
                 if (ItemStack.areStacksCombinable(stack, hoverItemStack) || stack == null) { // transfer one item from hover stack into stack
                     ItemStack tempHover = ItemStack.createItemStack(hoverItemStack.item, hoverItemStack.count);
@@ -122,6 +121,7 @@ public class Inventory {
     private Slot generateSlot(final int slotNum, SlotType type, boolean canMoveTo, boolean canMoveFrom) {
         TextButton button = new TextButton("", Game.getUiHandler().getSkin());
         button.setSize(SLOT_SIZE, SLOT_SIZE);
+        button.getLabel().setAlignment(Align.bottomRight);
         // event handler for when the button is clicked
         button.addListener(new ClickListener(-1) { // listens on every button with -1
             @Override
