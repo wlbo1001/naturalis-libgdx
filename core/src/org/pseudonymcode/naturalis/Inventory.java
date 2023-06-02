@@ -36,7 +36,7 @@ public class Inventory {
         public void onInventorySlotClick(Inventory source, Slot slot, int number, int mouseButtonUsed); // when a button is clicked, this is called before doing the normal behavior of moving and placing ItemStacks (should call the Inventory function doDefaultSlotClick() for default behavior)
 
         // Functions for interfacing with the storage (ItemStacks in an inventory) (also may be more than one storage list internally, so these should handle that)
-        public boolean insertIntoStorage(ItemStack itemStack, int inputNumber);// called when something wants to put an ItemStack into the object's inventory (and let the object handle how that happens) at specified input (if the object has multiple, this is nice, especially if using some kind of machine that lets you choose. Just ignore the second param if not needed)
+        public boolean insertIntoStorage(ItemStack itemStack, int inputSourceNumber);// called when something wants to put an ItemStack into the object's inventory (and let the object handle how that happens) at specified input (if the object has multiple, this is nice, especially if using some kind of machine that lets you choose. Just ignore the second param if not needed)
         public boolean outputFromStorage(ItemStack itemStack, int outputNumber); // called when something wants to take an ItemStack from the object's storage (again, the object may have multiple storage lists or extra, logic, this should handle it)
     }
     public class Slot {
@@ -188,7 +188,7 @@ public class Inventory {
         }
         else {
             slot.button.setText(Integer.toString(itemStack.count));
-            slot.image.setDrawable(Game.assetHandler.getDrawableFromTexturePath("items/" + itemStack.item.name + ".png"));
+            slot.image.setDrawable(Game.getAssetHandler().getDrawableFromTexturePath("items/" + itemStack.item.name + ".png"));
         }
     }
 
