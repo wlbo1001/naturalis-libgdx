@@ -3,6 +3,7 @@ package org.pseudonymcode.naturalis;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector3;
 import com.strongjoshua.console.GUIConsole;
 import org.pseudonymcode.naturalis.items.Item;
 import org.pseudonymcode.naturalis.items.ItemStack;
@@ -59,7 +60,10 @@ public class InputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        Vector3 worldPos = Game.getCamera().unproject(new Vector3(screenX, screenY, 0));
+        Game.getEntityHandler().handleClick(worldPos.x, worldPos.y, button);
+
+        return true;
     }
 
     @Override

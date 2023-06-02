@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.strongjoshua.console.GUIConsole;
+import org.pseudonymcode.naturalis.entities.EntityHandler;
 import org.pseudonymcode.naturalis.items.Item;
 import org.pseudonymcode.naturalis.player.Player;
 
@@ -20,15 +21,14 @@ import java.util.List;
 public class Game extends ApplicationAdapter {
     public static final int CAMERA_SCALE = 2; // pixels are 4x larger in width and height (this times the tile size converts actual pixels to game pixel positions)
 
-    public static AssetHandler assetHandler;
-
+    private static AssetHandler assetHandler;
     private static OrthographicCamera camera;
     private static SpriteBatch batch;
     private static UIHandler uiHandler;
     private static GUIConsole console;
     private static Player player;
+    private static EntityHandler entityHandler;
     private static Texture background;
-    private static List<Sprite> objs = new ArrayList<>();
 
     @Override
     public void create () {
@@ -61,16 +61,12 @@ public class Game extends ApplicationAdapter {
         background = assetHandler.getAssetManager().get("backgrounds/default.jpg", Texture.class);
         background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
-        // Test Objects
-        for (int i = 0; i < 1000; i++) {
-            Sprite sprite = new Sprite(assetHandler.getAssetManager().get("entities/asteroids/circle1.png", Texture.class));
-            sprite.setPosition((float)Math.random()*3000, (float)Math.random()*3000);
-            objs.add(sprite);
-        }
-
         // Create player object
         player = new Player();
         player.getBodyHandler().setPosition(0, 0);
+
+        // Create EntityHandler to manage all entities other than the player
+        entityHandler = new EntityHandler();
 
         // Create 2D camera
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/Game.CAMERA_SCALE, Gdx.graphics.getHeight()/Game.CAMERA_SCALE);
@@ -78,7 +74,7 @@ public class Game extends ApplicationAdapter {
 
         // Input multiplexer / processor (input comes from both the game and the UI)
         InputHandler inputHandler = new InputHandler();
-        InputMultiplexer inputMultiplexer = new InputMultiplexer(inputHandler, uiHandler.getStage(), console.getInputProcessor());
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(console.getInputProcessor(), uiHandler.getStage(), inputHandler);
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
@@ -102,10 +98,8 @@ public class Game extends ApplicationAdapter {
         // Background
         batch.draw(background, camera.position.x-1500, camera.position.y-1000, 3000f, 2000f);
 
-        // Draw test objects
-        for (Sprite obj : objs) {
-            batch.draw(obj, obj.getX(), obj.getY());
-        }
+        // Handle entity logic, spawning, collisions, drawing, etc.
+        entityHandler.update(batch, dt);
 
         // Draw player
         player.getBodyHandler().draw(batch);
@@ -130,4 +124,5 @@ public class Game extends ApplicationAdapter {
     public static GUIConsole getConsole() { return console; }
     public static AssetHandler getAssetHandler() { return assetHandler; }
     public static UIHandler getUiHandler() { return uiHandler; }
+    public static EntityHandler getEntityHandler() { return entityHandler; }
 }

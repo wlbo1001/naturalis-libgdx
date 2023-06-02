@@ -67,7 +67,7 @@ public class Player implements InventoryOwner {
         storageChanged = true;
     }
 
-    public boolean insertIntoStorage(ItemStack itemStack, int inputNumber) {
+    public boolean insertIntoStorage(ItemStack itemStack, int inputSourceNumber) {
         int firstEmptyPos = -1;
         for (int i = 0; i < storage.size(); i++) {
             ItemStack currStack = storage.get(i);
