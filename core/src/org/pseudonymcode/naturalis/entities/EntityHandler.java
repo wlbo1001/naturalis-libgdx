@@ -14,13 +14,13 @@ public class EntityHandler {
     }
 
     // Runs all entity updates, checks, spawn checks, etc. (should be called in Game's render function)
-    public void update(SpriteBatch batch, float deltaTime) {
+    public void update(SpriteBatch batch, float deltaTime, float animationElapsedTime) {
         // Run spawning checks
         Asteroid.doConditionalSpawns(deltaTime);
 
         for (Entity e : entities) {
             e.update(deltaTime);
-            e.draw(batch);
+            e.draw(batch, animationElapsedTime);
         }
     }
 

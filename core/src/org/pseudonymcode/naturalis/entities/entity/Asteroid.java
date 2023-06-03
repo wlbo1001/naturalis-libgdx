@@ -2,6 +2,7 @@ package org.pseudonymcode.naturalis.entities.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -30,24 +31,15 @@ public class Asteroid extends Entity {
             float x = (float)Math.random()*SPAWN_SQUARE_SIZE;
             float y = (float)Math.random()*SPAWN_SQUARE_SIZE;
             Vector2 pPos = Game.getPlayer().getBodyHandler().getPosition();
-            Game.getEntityHandler().registerEntity(new Asteroid(pPos.x + x*xModifier, pPos.y + y*yModifier, 300));
+            Game.getEntityHandler().registerEntity(new Asteroid(new Vector2(300, 300), new Vector2(pPos.x + x*xModifier, pPos.y + y*yModifier)));
         }
     }
 
-    private static final List<String> possibleTextures = new ArrayList<>(Arrays.asList("entities/asteroids/circle1.png"));
+    private static final List<String> possibleTextures = new ArrayList<>(Arrays.asList("animationTest.png"));
 
-    public Asteroid(float xPos, float yPos, float newBodySize) {
-        super(possibleTextures.get((int)(Math.random()*possibleTextures.size())), newBodySize, xPos, yPos, 3000);
-    }
-
-    @Override
-    public Vector2 getPosition() {
-        return super.getPosition();
-    }
-
-    @Override
-    public void setPosition(int x, int y) {
-        super.setPosition(x, y);
+    public Asteroid(Vector2 bodySize, Vector2 bodyPosition) {
+        super(bodySize, bodyPosition, 3000);
+        this.setAnimation(possibleTextures.get((int)(Math.random()*possibleTextures.size())), 16, 1);
     }
 
     @Override
@@ -56,16 +48,9 @@ public class Asteroid extends Entity {
     }
 
     @Override
-    public void draw(SpriteBatch batch) {
-        super.draw(batch);
-    }
-
-    @Override
     public boolean handleClick(float mouseX, float mouseY, int button, long currentUnixTime) {
         if (button == Input.Buttons.LEFT && super.handleClick(mouseX, mouseY, button, currentUnixTime)) {
-            System.out.println("Clicked on an asteroid!");
             Game.getPlayer().insertIntoStorage(new ItemStack(Item.getItem("debugItem1"), 1), 0);
-
             return true;
         }
         return false;

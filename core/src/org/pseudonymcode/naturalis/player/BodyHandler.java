@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import org.pseudonymcode.naturalis.Game;
+import org.pseudonymcode.naturalis.entities.Entity;
 
 public class BodyHandler {
     public enum MovementMode {

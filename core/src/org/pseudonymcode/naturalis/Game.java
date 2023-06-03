@@ -29,6 +29,7 @@ public class Game extends ApplicationAdapter {
     private static Player player;
     private static EntityHandler entityHandler;
     private static Texture background;
+    private static float animationElapsedTime;
 
     @Override
     public void create () {
@@ -72,6 +73,9 @@ public class Game extends ApplicationAdapter {
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/Game.CAMERA_SCALE, Gdx.graphics.getHeight()/Game.CAMERA_SCALE);
         camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
 
+        // Animation elapsed time tells MutableSprites what keyframe of animation to draw
+        animationElapsedTime = 0;
+
         // Input multiplexer / processor (input comes from both the game and the UI)
         InputHandler inputHandler = new InputHandler();
         InputMultiplexer inputMultiplexer = new InputMultiplexer(console.getInputProcessor(), uiHandler.getStage(), inputHandler);
@@ -81,6 +85,7 @@ public class Game extends ApplicationAdapter {
     @Override
     public void render () {
         float dt = Gdx.graphics.getDeltaTime();
+        animationElapsedTime += dt;
 
         // Update game world
         player.update(dt);
@@ -99,7 +104,7 @@ public class Game extends ApplicationAdapter {
         batch.draw(background, camera.position.x-1500, camera.position.y-1000, 3000f, 2000f);
 
         // Handle entity logic, spawning, collisions, drawing, etc.
-        entityHandler.update(batch, dt);
+        entityHandler.update(batch, dt, animationElapsedTime);
 
         // Draw player
         player.getBodyHandler().draw(batch);
