@@ -39,7 +39,7 @@ public class Asteroid extends Entity {
 
     public Asteroid(Vector2 bodySize, Vector2 bodyPosition) {
         super(bodySize, bodyPosition, 3000);
-        this.setAnimation(possibleTextures.get((int)(Math.random()*possibleTextures.size())), 16, 1);
+        this.setAnimation(possibleTextures.get((int)(Math.random()*possibleTextures.size())), 16, 16, 1);
     }
 
     @Override

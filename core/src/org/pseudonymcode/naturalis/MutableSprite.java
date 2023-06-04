@@ -23,16 +23,20 @@ public class MutableSprite {
         boundingRectangle.setSize(size.x, size.y);
     }
 
-    public void setAnimation(String animationPath, int frameSize, float frameDuration) {
-        TextureRegion[][] frames = TextureRegion.split(Game.getAssetHandler().getAssetManager().get(animationPath, Texture.class), frameSize, frameSize);
-        int index = 0;
-        TextureRegion[] formattedFrames = new TextureRegion[frames.length*frames[0].length];
-        for (int i = 0; i < frames.length; i++) {
-            for (int j = 0; j < frames[0].length; j++) {
-                formattedFrames[index++] = frames[j][i];
+    public void setAnimation(String animationPath, int frameWidth, int frameHeight, float frameDuration) {
+        try {
+            TextureRegion[][] frames = TextureRegion.split(Game.getAssetHandler().getAssetManager().get(animationPath, Texture.class), frameWidth, frameHeight);
+            int index = 0;
+            TextureRegion[] formattedFrames = new TextureRegion[frames.length*frames[0].length];
+            for (int i = 0; i < frames.length; i++) {
+                for (int j = 0; j < frames[0].length; j++) {
+                    formattedFrames[index++] = frames[i][j];
+                }
             }
+            animation = new Animation<TextureRegion>(frameDuration, formattedFrames);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to set animation: either your keyframe sizes are wrong or something very silly has happened.");
         }
-        animation = new Animation<TextureRegion>(frameDuration, formattedFrames);
     }
     public void clearAnimation() { animation = null; }
 
