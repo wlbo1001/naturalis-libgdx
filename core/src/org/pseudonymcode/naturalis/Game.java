@@ -64,7 +64,6 @@ public class Game extends ApplicationAdapter {
 
         // Create player object
         player = new Player();
-        player.getBodyHandler().setPosition(0, 0);
 
         // Create EntityHandler to manage all entities other than the player
         entityHandler = new EntityHandler();
@@ -107,7 +106,7 @@ public class Game extends ApplicationAdapter {
         entityHandler.update(batch, dt, animationElapsedTime);
 
         // Draw player
-        player.getBodyHandler().draw(batch);
+        player.getBodyHandler().draw(batch, animationElapsedTime);
 
         // End drawing the game (so the UI can be drawn overtop)
         batch.end();

@@ -8,11 +8,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class MutableSprite {
-    Animation<TextureRegion> animation;
-    Texture still;
+    Animation<TextureRegion> animation; // if not null, this holds animation key-frames for drawing
+    Texture still; // if not null, this holds a still texture for drawing
     Vector2 size;
     Vector2 position;
-    Rectangle boundingRectangle;
+    Rectangle boundingRectangle; // for click detection, collision, or whatever else needs a bounding box
+    float rotation; // in degrees!
 
     // To draw this object, must call setAnimation() or setStill() after creating it!
     public MutableSprite(Vector2 spriteSize, Vector2 spritePosition) {
@@ -52,7 +53,10 @@ public class MutableSprite {
             batch.draw(animation.getKeyFrame(animationElapsedTime, true), drawX, drawY, size.x, size.y);
         }
         else if (still != null) {
-            batch.draw(still, drawX, drawY, size.x, size.y);
+            if (rotation != 0) {
+                batch.draw(new TextureRegion(still), drawX, drawY, size.x/2f, size.y/2f, size.x, size.y, 1, 1, rotation);
+            }
+            else batch.draw(still, drawX, drawY, size.x, size.y);
         }
         else throw new RuntimeException("Attempted to draw a sprite that has neither animation keyframes nor a still image.");
     }
@@ -60,6 +64,7 @@ public class MutableSprite {
     public Vector2 getSize() { return this.size; }
     public Vector2 getPosition() { return this.position; }
     public Rectangle getBoundingRectangle() { return this.boundingRectangle; }
+    public float getRotation() { return rotation; }
     public void setSize(Vector2 size) {
         this.size = size;
         boundingRectangle.setSize(size.x, size.y);
@@ -75,5 +80,11 @@ public class MutableSprite {
     public void setY(float y) {
         this.position.y = y;
         boundingRectangle.setY(y);
+    }
+    public void setRotation(float degrees) {
+        rotation = degrees % 360;
+    }
+    public void rotate(float degrees) {
+        rotation += degrees % 360;
     }
 }
