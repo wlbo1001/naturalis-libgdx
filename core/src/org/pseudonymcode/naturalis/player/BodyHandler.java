@@ -9,6 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import org.pseudonymcode.naturalis.Game;
 import org.pseudonymcode.naturalis.MutableSprite;
 import org.pseudonymcode.naturalis.entities.Entity;
+import org.pseudonymcode.naturalis.items.Item;
+import org.pseudonymcode.naturalis.items.ItemStack;
+
+import java.util.List;
 
 public class BodyHandler extends MutableSprite {
     public enum MovementMode {
@@ -26,7 +30,7 @@ public class BodyHandler extends MutableSprite {
     private Vector2 velocity;
 
     public BodyHandler() {
-        super(new Vector2(32, 32), new Vector2(0, 0));
+        super(new Vector2(32, 32), new Vector2(0, 0), false);
         this.setStill("player/default.png");
         velocity = new Vector2(0, 0);
     }

@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import org.pseudonymcode.naturalis.entities.Entity;
+
+import java.util.List;
 
 public class MutableSprite {
     Animation<TextureRegion> animation; // if not null, this holds animation key-frames for drawing
@@ -14,14 +17,16 @@ public class MutableSprite {
     Vector2 position;
     Rectangle boundingRectangle; // for click detection, collision, or whatever else needs a bounding box
     float rotation; // in degrees!
+    boolean hasCollisionCheck;
 
     // To draw this object, must call setAnimation() or setStill() after creating it!
-    public MutableSprite(Vector2 spriteSize, Vector2 spritePosition) {
+    public MutableSprite(Vector2 spriteSize, Vector2 spritePosition, boolean checksForCollisions) {
         size = spriteSize;
         position = spritePosition;
         boundingRectangle = new Rectangle();
         boundingRectangle.setPosition(position.x - size.x/2f, position.y - size.y/2f);
         boundingRectangle.setSize(size.x, size.y);
+        hasCollisionCheck = checksForCollisions;
     }
 
     public void setAnimation(String animationPath, int frameWidth, int frameHeight, float frameDuration) {
@@ -60,6 +65,9 @@ public class MutableSprite {
         }
         else throw new RuntimeException("Attempted to draw a sprite that has neither animation keyframes nor a still image.");
     }
+
+    public boolean hasCollisionCheck() { return hasCollisionCheck; } // returns whether handleCollsion() should be called on a subclass
+    public void handleCollisions(List<Entity> registeredEntities) {} // override this if an object needs to do something on collisions (this is called every frame)
 
     public Vector2 getSize() { return this.size; }
     public Vector2 getPosition() { return this.position; }

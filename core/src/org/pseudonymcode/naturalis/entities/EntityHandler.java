@@ -2,6 +2,7 @@ package org.pseudonymcode.naturalis.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
+import org.pseudonymcode.naturalis.Game;
 import org.pseudonymcode.naturalis.entities.entity.Asteroid;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class EntityHandler {
 
         for (Entity e : entities) {
             e.update(deltaTime);
+            if (e.hasCollisionCheck()) e.handleCollisions(entities); // can check for player collision thyself (Game.getPlayer().getBodyHandler().getBoundingRectangle())
             e.draw(batch, animationElapsedTime);
         }
     }

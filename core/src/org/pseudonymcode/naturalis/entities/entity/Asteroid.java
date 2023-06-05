@@ -35,10 +35,10 @@ public class Asteroid extends Entity {
         }
     }
 
-    private static final List<String> possibleTextures = new ArrayList<>(Arrays.asList("animationTest.png"));
+    private static final List<String> possibleTextures = new ArrayList<>(Arrays.asList("entities/asteroids/animationTest.png"));
 
     public Asteroid(Vector2 bodySize, Vector2 bodyPosition) {
-        super(bodySize, bodyPosition, 3000);
+        super("asteroid", bodySize, bodyPosition, true, 3000);
         this.setAnimation(possibleTextures.get((int)(Math.random()*possibleTextures.size())), 16, 16, 1);
     }
 
@@ -54,5 +54,10 @@ public class Asteroid extends Entity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void handleCollisions(List<Entity> entities) {
+        if (Game.getPlayer().getBodyHandler().getBoundingRectangle().overlaps(this.getBoundingRectangle())) Game.getPlayer().insertIntoStorage(new ItemStack(Item.getItem("debugItem2"), 3), 0);
     }
 }

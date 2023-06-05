@@ -38,7 +38,7 @@ public class AssetHandler {
 
         // Entity Assets
         assetManager.load("entities/asteroids/circle1.png", Texture.class);
-        assetManager.load("animationTest.png", Texture.class);
+        assetManager.load("entities/asteroids/animationTest.png", Texture.class);
     }
 
     // Loads assets asynchronously. Called over and over in the render function, game shouldn't try to load anything until this returns true.

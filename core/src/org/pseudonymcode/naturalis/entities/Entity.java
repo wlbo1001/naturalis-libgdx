@@ -8,11 +8,13 @@ import org.pseudonymcode.naturalis.Game;
 import org.pseudonymcode.naturalis.MutableSprite;
 
 public abstract class Entity extends MutableSprite {
+    public String entityType;
     public long lastClickTime; // in seconds
     public long clickTimeWait; // in seconds
 
-    public Entity(Vector2 bodySize, Vector2 bodyPosition, long clickDelayTime) {
-        super(bodySize, bodyPosition);
+    public Entity(String namedEntityType, Vector2 bodySize, Vector2 bodyPosition, boolean hasCollisionCheck, long clickDelayTime) {
+        super(bodySize, bodyPosition, hasCollisionCheck);
+        entityType = namedEntityType;
         clickTimeWait = clickDelayTime;
         lastClickTime = 0;
     }
